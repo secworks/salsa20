@@ -1,8 +1,8 @@
 //======================================================================
 //
-// chacha.v
+// salsa20.v
 // --------
-// Top level wrapper for the ChaCha stream, cipher core providing
+// Top level wrapper for the Salsa20 stream, cipher core providing
 // a simple memory like interface with 32 bit data access.
 //
 //
@@ -35,7 +35,7 @@
 //
 //======================================================================
 
-module chacha(
+module salsa20(
               // Clock and reset.
               input wire           clk,
               input wire           reset_n,
@@ -266,7 +266,7 @@ module chacha(
   //----------------------------------------------------------------
   // core instantiation.
   //----------------------------------------------------------------
-  chacha_core core (
+  salsa20_core core (
                     .clk(clk),
                     .reset_n(reset_n),
                     
@@ -884,8 +884,8 @@ module chacha(
             end
         end
     end // addr_decoder
-endmodule // chacha
+endmodule // salsa20
 
 //======================================================================
-// EOF chacha.v
+// EOF salsa20.v
 //======================================================================

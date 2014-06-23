@@ -1,8 +1,8 @@
 //======================================================================
 //
-// chacha_qr.v
+// salsa20_qr.v
 // -----------
-// Verilog 2001 implementation of the stream cipher ChaCha.
+// Verilog 2001 implementation of the stream cipher Salsa20.
 // This is the combinational QR logic as a separade module to allow
 // us to build versions of the cipher with 1, 2, 4 and even 8
 // parallel qr functions.
@@ -38,7 +38,7 @@
 //
 //======================================================================
 
-module chacha_qr(
+module salsa20_qr(
                  input wire [31 : 0]  a,
                  input wire [31 : 0]  b,
                  input wire [31 : 0]  c,
@@ -111,8 +111,8 @@ module chacha_qr(
       internal_c_prim = c1;
       internal_d_prim = d3;
     end // qr
-endmodule // chacha_qr
+endmodule // salsa20_qr
 
 //======================================================================
-// EOF chacha_qr.v
+// EOF salsa20_qr.v
 //======================================================================

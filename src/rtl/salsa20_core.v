@@ -1,8 +1,8 @@
 //======================================================================
 //
-// chacha_core.v
+// salsa20_core.v
 // --------------
-// Verilog 2001 implementation of the stream cipher ChaCha.
+// Verilog 2001 implementation of the stream cipher Salsa20.
 // This is the internal core with wide interfaces.
 //
 //
@@ -36,7 +36,7 @@
 //
 //======================================================================
 
-module chacha_core(
+module salsa20_core(
                    input wire            clk,
                    input wire            reset_n,
                 
@@ -244,9 +244,9 @@ module chacha_core(
   reg          block_ctr_inc;
   reg          block_ctr_rst;
   
-  reg [2 : 0] chacha_ctrl_reg;
-  reg [2 : 0] chacha_ctrl_new;
-  reg         chacha_ctrl_we;
+  reg [2 : 0] salsa20_ctrl_reg;
+  reg [2 : 0] salsa20_ctrl_new;
+  reg         salsa20_ctrl_we;
   
   
   //----------------------------------------------------------------
@@ -299,7 +299,7 @@ module chacha_core(
   //----------------------------------------------------------------
   // Instantiation of the qr modules.
   //----------------------------------------------------------------
-  chacha_qr qr0(
+  salsa20_qr qr0(
                 .a(qr0_a),
                 .b(qr0_b),
                 .c(qr0_c),
@@ -311,7 +311,7 @@ module chacha_core(
                 .d_prim(qr0_d_prim)
                );
 
-  chacha_qr qr1(
+  salsa20_qr qr1(
                 .a(qr1_a),
                 .b(qr1_b),
                 .c(qr1_c),
@@ -323,7 +323,7 @@ module chacha_core(
                 .d_prim(qr1_d_prim)
                );
   
-  chacha_qr qr2(
+  salsa20_qr qr2(
                 .a(qr2_a),
                 .b(qr2_b),
                 .c(qr2_c),
@@ -335,7 +335,7 @@ module chacha_core(
                 .d_prim(qr2_d_prim)
                );
 
-  chacha_qr qr3(
+  salsa20_qr qr3(
                 .a(qr3_a),
                 .b(qr3_b),
                 .c(qr3_c),
@@ -419,7 +419,7 @@ module chacha_core(
           dr_ctr_reg         <= 0;
           block0_ctr_reg     <= 32'h00000000;
           block1_ctr_reg     <= 32'h00000000;
-          chacha_ctrl_reg    <= CTRL_IDLE;
+          salsa20_ctrl_reg   <= CTRL_IDLE;
         end
       else
         begin
@@ -574,9 +574,9 @@ module chacha_core(
               block1_ctr_reg <= block1_ctr_new;
             end
           
-          if (chacha_ctrl_we)
+          if (salsa20_ctrl_we)
             begin
-              chacha_ctrl_reg <= chacha_ctrl_new;
+              salsa20_ctrl_reg <= salsa20_ctrl_new;
             end
         end
     end // reg_update
@@ -1203,11 +1203,11 @@ module chacha_core(
   
 
   //----------------------------------------------------------------
-  // chacha_ctrl_fsm
+  // salsa20_ctrl_fsm
   // Logic for the state machine controlling the core behaviour.
   //----------------------------------------------------------------
   always @*
-    begin : chacha_ctrl_fsm
+    begin : salsa20_ctrl_fsm
       init_state         = 0;
       update_state       = 0;
       sample_params      = 0;
@@ -1229,32 +1229,32 @@ module chacha_core(
       data_out_valid_new = 0;
       data_out_valid_we  = 0;
       
-      chacha_ctrl_new    = CTRL_IDLE;
-      chacha_ctrl_we     = 0;
+      salsa20_ctrl_new   = CTRL_IDLE;
+      salsa20_ctrl_we    = 0;
       
       
-      case (chacha_ctrl_reg)
+      case (salsa20_ctrl_reg)
         CTRL_IDLE:
           begin
             ready_wire = 1;
             if (init)
               begin
-                data_in_we      = 1;
-                sample_params   = 1;
-                block_ctr_rst   = 1;
-                chacha_ctrl_new = CTRL_INIT;
-                chacha_ctrl_we  = 1;
+                data_in_we       = 1;
+                sample_params    = 1;
+                block_ctr_rst    = 1;
+                salsa20_ctrl_new = CTRL_INIT;
+                salsa20_ctrl_we  = 1;
               end
           end
 
         
         CTRL_INIT:
           begin
-            init_state      = 1;
-            qr_ctr_rst      = 1;
-            dr_ctr_rst      = 1;
-            chacha_ctrl_new = CTRL_ROUNDS;
-            chacha_ctrl_we  = 1;
+            init_state       = 1;
+            qr_ctr_rst       = 1;
+            dr_ctr_rst       = 1;
+            salsa20_ctrl_new = CTRL_ROUNDS;
+            salsa20_ctrl_we  = 1;
           end
 
         
@@ -1267,8 +1267,8 @@ module chacha_core(
                 dr_ctr_inc = 1;
                 if (dr_ctr_reg == (rounds_reg - 1))
                   begin
-                    chacha_ctrl_new = CTRL_FINALIZE;
-                    chacha_ctrl_we  = 1;
+                    salsa20_ctrl_new = CTRL_FINALIZE;
+                    salsa20_ctrl_we  = 1;
                   end
               end
           end
@@ -1279,8 +1279,8 @@ module chacha_core(
             update_output      = 1;
             data_out_valid_new = 1;
             data_out_valid_we  = 1;
-            chacha_ctrl_new    = CTRL_DONE;
-            chacha_ctrl_we     = 1;
+            salsa20_ctrl_new   = CTRL_DONE;
+            salsa20_ctrl_we    = 1;
           end
         
         
@@ -1294,8 +1294,8 @@ module chacha_core(
                 data_in_we         = 1;
                 sample_params      = 1;
                 block_ctr_rst      = 1;
-                chacha_ctrl_new    = CTRL_INIT;
-                chacha_ctrl_we     = 1;
+                salsa20_ctrl_new    = CTRL_INIT;
+                salsa20_ctrl_we     = 1;
               end
             else if (next)
               begin
@@ -1303,14 +1303,14 @@ module chacha_core(
                 data_out_valid_we  = 1;
                 data_in_we         = 1;
                 block_ctr_inc      = 1;
-                chacha_ctrl_new    = CTRL_INIT;
-                chacha_ctrl_we     = 1;
+                salsa20_ctrl_new    = CTRL_INIT;
+                salsa20_ctrl_we     = 1;
               end
           end
-      endcase // case (chacha_ctrl_reg)
-    end // chacha_ctrl_fsm
-endmodule // chacha_core
+      endcase // case (salsa20_ctrl_reg)
+    end // salsa20_ctrl_fsm
+endmodule // salsa20_core
 
 //======================================================================
-// EOF chacha_core.v
+// EOF salsa20_core.v
 //======================================================================
