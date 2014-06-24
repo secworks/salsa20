@@ -39,33 +39,33 @@
 //======================================================================
 
 module salsa20_qr(
-                 input wire [31 : 0]  a,
-                 input wire [31 : 0]  b,
-                 input wire [31 : 0]  c,
-                 input wire [31 : 0]  d,
+                 input wire [31 : 0]  y0,
+                 input wire [31 : 0]  y1,
+                 input wire [31 : 0]  y2,
+                 input wire [31 : 0]  y3,
 
-                 output wire [31 : 0] a_prim,
-                 output wire [31 : 0] b_prim,
-                 output wire [31 : 0] c_prim,
-                 output wire [31 : 0] d_prim
+                 output wire [31 : 0] z0,
+                 output wire [31 : 0] z1,
+                 output wire [31 : 0] z2,
+                 output wire [31 : 0] z3
                 );
 
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
-  reg [31 : 0] internal_a_prim;
-  reg [31 : 0] internal_b_prim;
-  reg [31 : 0] internal_c_prim;
-  reg [31 : 0] internal_d_prim;
+  reg [31 : 0] tmp_z0;
+  reg [31 : 0] tmp_z1;
+  reg [31 : 0] tmp_z2;
+  reg [31 : 0] tmp_z3;
 
   
   //----------------------------------------------------------------
   // Concurrent connectivity for ports.
   //----------------------------------------------------------------
-  assign a_prim = internal_a_prim;
-  assign b_prim = internal_b_prim;
-  assign c_prim = internal_c_prim;
-  assign d_prim = internal_d_prim;
+  assign z0 = tmp_z0;
+  assign z0 = tmp_z1;
+  assign z0 = tmp_z2;
+  assign z0 = tmp_z3;
 
   
   //----------------------------------------------------------------
@@ -75,41 +75,22 @@ module salsa20_qr(
   //----------------------------------------------------------------
   always @*
     begin : qr
-      reg [31 : 0] a0;
-      reg [31 : 0] a1;
+      reg [31 : 0] z0_0;
+      reg [31 : 0] z1_0;
+      reg [31 : 0] z2_0;
+      reg [31 : 0] z3_0;
 
-      reg [31 : 0] b0;
-      reg [31 : 0] b1;
-      reg [31 : 0] b2;
-      reg [31 : 0] b3;
-      
-      reg [31 : 0] c0;
-      reg [31 : 0] c1;
-      reg [31 : 0] c2;
-      reg [31 : 0] c3;
-      
-      reg [31 : 0] d0;
-      reg [31 : 0] d1;
-      reg [31 : 0] d2;
-      reg [31 : 0] d3;
-        
-      a0 = a + b;
-      d0 = d ^ a0;
-      d1 = {d0[15 : 0], d0[31 : 16]};
-      c0 = c + d1;
-      b0 = b ^ c0;
-      b1 = {b0[19 : 0], b0[31 : 20]};
-      a1 = a0 + b1;
-      d2 = d1 ^ a1;
-      d3 = {d2[23 : 0], d2[31 : 24]};
-      c1 = c0 + d3;
-      b2 = b1 ^ c1;
-      b3 = {b2[24 : 0], b2[31 : 25]};
+      z1_0 = (y0 + y3);
+      z1   = {z1_0[24 : 0], z1_0[31 : 25]} ^ y1;
 
-      internal_a_prim = a1;
-      internal_b_prim = b3;
-      internal_c_prim = c1;
-      internal_d_prim = d3;
+      z2_0 = (z1 + y0);
+      z2   = {z2_0[22 : 0], z2_0[31 : 23]} ^ y2;
+
+      z3_0 = (z2 + z1);
+      z3   = {z3_0[18 : 0], z3_0[31 : 19]} ^ y3;
+
+      z0_0 = (z3 + z2);
+      z0   = {z0_0[13 : 0], z0_0[31 : 14]} ^ y0;
     end // qr
 endmodule // salsa20_qr
 
