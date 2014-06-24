@@ -159,8 +159,8 @@ module tb_salsa20_qr();
       tb_y3     = 0;
     end
   endtask // init_sim
-  
 
+  
   //----------------------------------------------------------------
   // display_test_result()
   //
@@ -179,8 +179,46 @@ module tb_salsa20_qr();
         end
     end
   endtask // display_test_result
-                         
-    
+
+
+  //----------------------------------------------------------------
+  // test_qr
+  //
+  // Test case runner task.
+  //----------------------------------------------------------------
+  task test_qr(input [31 : 0] y0, 
+               input [31 : 0] y1, 
+               input [31 : 0] y2,
+               input [31 : 0] y3,
+               input [31 : 0] ez0,
+               input [31 : 0] ez1,
+               input [31 : 0] ez2,
+               input [31 : 0] ez3
+               );
+    begin
+      tb_y0 = y0;
+      tb_y1 = y1;
+      tb_y2 = y2;
+      tb_y3 = y3;
+      #(CLK_PERIOD);
+      if ((dut.z0 != ez0) || (dut.z1 != ez1) || (dut.z2 != ez2) || (dut.z3 != ez3))
+        begin
+          $display("** TC%02d Error: Incorrect z values generated.", tc_ctr);
+          $display("** Expected: z0 = 0x%08x, z1 = 0x%08x, z2 = 0x%08x, z3 = 0x%08x",
+                   ez0, ez1, ez2, ez3);
+          $display("** Got:      z0 = 0x%08x, z1 = 0x%08x, z2 = 0x%08x, z3 = 0x%08x",
+                   dut.z0, dut.z1, dut.z2, dut.z3);
+          error_ctr = error_ctr + 1;
+        end
+      else
+        begin
+          $display("** TC%02d OK.", tc_ctr);
+        end
+      tc_ctr = tc_ctr + 1;
+    end
+  endtask // test_qr
+  
+
   //----------------------------------------------------------------
   // salsa20_qr_test
   //
@@ -188,68 +226,72 @@ module tb_salsa20_qr();
   //----------------------------------------------------------------
   initial
     begin : salsa20_qr_test
+
+      reg [31 : 0] ty0;
+      reg [31 : 0] ty1;
+      reg [31 : 0] ty2;
+      reg [31 : 0] ty3;
+      reg [31 : 0] ez0;
+      reg [31 : 0] ez1;
+      reg [31 : 0] ez2;
+      reg [31 : 0] ez3;
+
       $display("   -= Testbench for Salsa20 qr started =-");
       $display("    =====================================");
       $display("");
-
+      
       init_sim();
       dump_dut_state();
 
-      $display("TC0: All zero inputs:");
-      tb_y0 = 32'h00000000;
-      tb_y1 = 32'h00000000;
-      tb_y2 = 32'h00000000;
-      tb_y3 = 32'h00000000;
-      #(CLK_PERIOD);
-      dump_dut_state();
+      ty0 = 32'h00000000;
+      ty1 = 32'h00000000;
+      ty2 = 32'h00000000;
+      ty3 = 32'h00000000;
+      ez0 = 32'h00000000;
+      ez1 = 32'h00000000;
+      ez2 = 32'h00000000;
+      ez3 = 32'h00000000;
+      test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
 
-      $display("TC1: y0 assigned non zero value.:");
-      tb_y0 = 32'h00000001;
-      tb_y1 = 32'h00000000;
-      tb_y2 = 32'h00000000;
-      tb_y3 = 32'h00000000;
-      #(CLK_PERIOD);
-      dump_dut_state();
+      ty0 = 32'h00000001;
+      ty1 = 32'h00000000;
+      ty2 = 32'h00000000;
+      ty3 = 32'h00000000;
+      ez0 = 32'h08008145;
+      ez1 = 32'h00000080;
+      ez2 = 32'h00010200;
+      ez3 = 32'h20500000;
+      test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
 
-      $display("TC2: y1 assigned non zero value.:");
-      tb_y0 = 32'h00000000;
-      tb_y1 = 32'h00000001;
-      tb_y2 = 32'h00000000;
-      tb_y3 = 32'h00000000;
-      #(CLK_PERIOD);
-      dump_dut_state();
+      ty0 = 32'h00000000;
+      ty1 = 32'h00000001;
+      ty2 = 32'h00000000;
+      ty3 = 32'h00000000;
+      ez0 = 32'h88000100;
+      ez1 = 32'h00000001;
+      ez2 = 32'h00000200;
+      ez3 = 32'h00402000;      
+      test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
 
-      $display("TC3: y2 assigned non zero value.:");
-      tb_y0 = 32'h00000000;
-      tb_y1 = 32'h00000000;
-      tb_y2 = 32'h00000001;
-      tb_y3 = 32'h00000000;
-      #(CLK_PERIOD);
-      dump_dut_state();
+      ty0 = 32'h00000000;
+      ty1 = 32'h00000000;
+      ty2 = 32'h00000001;
+      ty3 = 32'h00000000;
+      ez0 = 32'h80040000;
+      ez1 = 32'h00000000;
+      ez2 = 32'h00000001;
+      ez3 = 32'h00002000;
+      test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
 
-      $display("TC3: y3 assigned non zero value.:");
-      tb_y0 = 32'h00000000;
-      tb_y1 = 32'h00000000;
-      tb_y2 = 32'h00000000;
-      tb_y3 = 32'h00000001;
-      #(CLK_PERIOD);
-      dump_dut_state();
-
-      $display("TC4: More complex test case 1:");
-      tb_y0 = 32'he7e8c006;
-      tb_y1 = 32'hc4f9417d;
-      tb_y2 = 32'h6479b4b2;
-      tb_y3 = 32'h68c67137;
-      #(CLK_PERIOD);
-      dump_dut_state();
-
-      $display("TC5: More complex test case 2:");
-      tb_y0 = 32'hd3917c5b;
-      tb_y1 = 32'h55f1c407;
-      tb_y2 = 32'h52a58a7a;
-      tb_y3 = 32'h8f887a3b;
-      #(CLK_PERIOD);
-      dump_dut_state();
+      ty0 = 32'h00000000;
+      ty1 = 32'h00000000;
+      ty2 = 32'h00000000;
+      ty3 = 32'h00000001;
+      ez0 = 32'h00048044;
+      ez1 = 32'h00000080;
+      ez2 = 32'h00010000;
+      ez3 = 32'h20100001;
+      test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
       
       display_test_result();
       $display("");
