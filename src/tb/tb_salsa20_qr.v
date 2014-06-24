@@ -131,6 +131,11 @@ module tb_salsa20_qr();
     begin
       $display("State of DUT");
       $display("------------");
+      $display("Inputs and outputs:");
+      $display("y0 = 0x%08x, y1 = 0x%08x, y3 = 0x%08x, y3 = 0x%08x",
+               dut.y0, dut.y1, dut.y2, dut.y3);
+      $display("z0 = 0x%08x, z1 = 0x%08x, z2 = 0x%08x, z3 = 0x%08x",
+               dut.z0, dut.z1, dut.z2, dut.z3);
       $display("");
     end
   endtask // dump_dut_state
@@ -190,6 +195,13 @@ module tb_salsa20_qr();
       init_sim();
       dump_dut_state();
 
+      $display("TC0: All zero inputs:");
+      tb_y0 = 32'h00000000;
+      tb_y1 = 32'h00000000;
+      tb_y2 = 32'h00000000;
+      tb_y3 = 32'h00000000;
+      #(CLK_PERIOD);
+      dump_dut_state();
       
       display_test_result();
       $display("");
