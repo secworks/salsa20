@@ -292,6 +292,26 @@ module tb_salsa20_qr();
       ez2 = 32'h00010000;
       ez3 = 32'h20100001;
       test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
+
+      ty0 = 32'he7e8c006;
+      ty1 = 32'hc4f9417d;
+      ty2 = 32'h6479b4b2;
+      ty3 = 32'h68c67137;
+      ez0 = 32'he876d72b;
+      ez1 = 32'h9361dfd5;
+      ez2 = 32'hf1460244;
+      ez3 = 32'h948541a3;
+      test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
+
+      ty0 = 32'hd3917c5b;
+      ty1 = 32'h55f1c407;
+      ty2 = 32'h52a58a7a;
+      ty3 = 32'h8f887a3b;
+      ez0 = 32'h3e2f308c;
+      ez1 = 32'hd90a8f36;
+      ez2 = 32'h6ab2a923;
+      ez3 = 32'h2883524c;
+      test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
       
       display_test_result();
       $display("");
