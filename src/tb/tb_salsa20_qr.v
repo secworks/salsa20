@@ -63,14 +63,18 @@ module tb_salsa20_qr();
   reg [31 : 0] error_ctr;
   reg [31 : 0] tc_ctr;
 
+  reg           tb_clk;
+  reg           tb_reset_n;
+
   reg [31 : 0]  tb_y0;
   reg [31 : 0]  tb_y1;
   reg [31 : 0]  tb_y2;
   reg [31 : 0]  tb_y3;
-  wire [31 : 0] tb_y0;
-  wire [31 : 0] tb_y1;
-  wire [31 : 0] tb_y2;
-  wire [31 : 0] tb_y3;
+
+  wire [31 : 0] tb_z0;
+  wire [31 : 0] tb_z1;
+  wire [31 : 0] tb_z2;
+  wire [31 : 0] tb_z3;
   
   
   //----------------------------------------------------------------
