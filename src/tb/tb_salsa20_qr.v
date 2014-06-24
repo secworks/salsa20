@@ -202,6 +202,14 @@ module tb_salsa20_qr();
       tb_y3 = 32'h00000000;
       #(CLK_PERIOD);
       dump_dut_state();
+
+      $display("TC1: y0 assigned non zero value.:");
+      tb_y0 = 32'h00000001;
+      tb_y1 = 32'h00000000;
+      tb_y2 = 32'h00000000;
+      tb_y3 = 32'h00000000;
+      #(CLK_PERIOD);
+      dump_dut_state();
       
       display_test_result();
       $display("");
