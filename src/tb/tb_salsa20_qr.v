@@ -234,6 +234,22 @@ module tb_salsa20_qr();
       tb_y3 = 32'h00000001;
       #(CLK_PERIOD);
       dump_dut_state();
+
+      $display("TC4: More complex test case 1:");
+      tb_y0 = 32'he7e8c006;
+      tb_y1 = 32'hc4f9417d;
+      tb_y2 = 32'h6479b4b2;
+      tb_y3 = 32'h68c67137;
+      #(CLK_PERIOD);
+      dump_dut_state();
+
+      $display("TC5: More complex test case 2:");
+      tb_y0 = 32'hd3917c5b;
+      tb_y1 = 32'h55f1c407;
+      tb_y2 = 32'h52a58a7a;
+      tb_y3 = 32'h8f887a3b;
+      #(CLK_PERIOD);
+      dump_dut_state();
       
       display_test_result();
       $display("");
