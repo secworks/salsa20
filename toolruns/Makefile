@@ -9,6 +9,9 @@
 #
 #===================================================================
 
+QR_SRC=../src/rtl/salsa20_qr.v
+QR_TB_SRC=../src/tb/tb_salsa20_qr.v
+
 CORE_SRC=../src/rtl/salsa20_core.v ../src/rtl/salsa20_qr.v
 CORE_TB_SRC=../src/tb/tb_salsa20_core.v
 
@@ -28,6 +31,11 @@ top: $(TOP_TB_SRC) $(TOP_SRC)
 core: $(CORE_TB_SRC) $(CORE_SRC)
 	$(CC) -o core.sim $(CORE_SRC) $(CORE_TB_SRC)
 
+qr:  $(QR_TB_SRC) $(QR_SRC)
+	$(CC) -o qr.sim $(QR_SRC) $(QR_TB_SRC)
+
+sim-qr: qr.sim
+	./qr.sim
 
 sim-core: core.sim
 	./core.sim
