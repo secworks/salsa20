@@ -63,9 +63,9 @@ module salsa20_qr(
   // Concurrent connectivity for ports.
   //----------------------------------------------------------------
   assign z0 = tmp_z0;
-  assign z0 = tmp_z1;
-  assign z0 = tmp_z2;
-  assign z0 = tmp_z3;
+  assign z1 = tmp_z1;
+  assign z2 = tmp_z2;
+  assign z3 = tmp_z3;
 
   
   //----------------------------------------------------------------
