@@ -300,51 +300,51 @@ module salsa20_core(
   // Instantiation of the qr modules.
   //----------------------------------------------------------------
   salsa20_qr qr0(
-                .a(qr0_a),
-                .b(qr0_b),
-                .c(qr0_c),
-                .d(qr0_d),
+                .y0(qr0_a),
+                .y1(qr0_b),
+                .y2(qr0_c),
+                .y3(qr0_d),
                 
-                .a_prim(qr0_a_prim),
-                .b_prim(qr0_b_prim),
-                .c_prim(qr0_c_prim),
-                .d_prim(qr0_d_prim)
+                .z0(qr0_a_prim),
+                .z1(qr0_b_prim),
+                .z2(qr0_c_prim),
+                .z3(qr0_d_prim)
                );
 
   salsa20_qr qr1(
-                .a(qr1_a),
-                .b(qr1_b),
-                .c(qr1_c),
-                .d(qr1_d),
+                .y0(qr1_a),
+                .y1(qr1_b),
+                .y2(qr1_c),
+                .y3(qr1_d),
                 
-                .a_prim(qr1_a_prim),
-                .b_prim(qr1_b_prim),
-                .c_prim(qr1_c_prim),
-                .d_prim(qr1_d_prim)
+                .z0(qr1_a_prim),
+                .z1(qr1_b_prim),
+                .z2(qr1_c_prim),
+                .z3(qr1_d_prim)
                );
   
   salsa20_qr qr2(
-                .a(qr2_a),
-                .b(qr2_b),
-                .c(qr2_c),
-                .d(qr2_d),
+                .y0(qr2_a),
+                .y1(qr2_b),
+                .y2(qr2_c),
+                .y3(qr2_d),
                 
-                .a_prim(qr2_a_prim),
-                .b_prim(qr2_b_prim),
-                .c_prim(qr2_c_prim),
-                .d_prim(qr2_d_prim)
+                .z0(qr2_a_prim),
+                .z1(qr2_b_prim),
+                .z2(qr2_c_prim),
+                .z3(qr2_d_prim)
                );
 
   salsa20_qr qr3(
-                .a(qr3_a),
-                .b(qr3_b),
-                .c(qr3_c),
-                .d(qr3_d),
+                .y0(qr3_a),
+                .y1(qr3_b),
+                .y2(qr3_c),
+                .y3(qr3_d),
                 
-                .a_prim(qr3_a_prim),
-                .b_prim(qr3_b_prim),
-                .c_prim(qr3_c_prim),
-                .d_prim(qr3_d_prim)
+                .z0(qr3_a_prim),
+                .z1(qr3_b_prim),
+                .z2(qr3_c_prim),
+                .z3(qr3_d_prim)
                );
   
   
