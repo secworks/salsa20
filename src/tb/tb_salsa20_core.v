@@ -292,33 +292,33 @@ module tb_salsa20_core();
   // Test the quarterround by forcing the inputs of the logic 
   // to known given values and observing the result.
   //----------------------------------------------------------------
-  task test_quarterround(input [31 : 0] a, input [31 : 0] b, 
-                         input [31 : 0] c, input [31 : 0] d);
-    begin
-      $display("Test of quarterround.");
-      $display("a = 0x%08x, b = 0x%08x", a, b);
-      $display("c = 0x%08x, d = 0x%08x", c, d);
-      $display("");
-      
-      dut.qr0_a = a;
-      dut.qr0_b = b;
-      dut.qr0_c = c;
-      dut.qr0_d = d;
-      #(2 * CLK_HALF_PERIOD);
-      
-      $display("a0 = 0x%08x, a1 = 0x%08x", dut.qr0.qr.a0, dut.qr0.qr.a1);
-      $display("b0 = 0x%08x, b1 = 0x%08x", dut.qr0.qr.b0, dut.qr0.qr.b1);
-      $display("b2 = 0x%08x, b3 = 0x%08x", dut.qr0.qr.b2, dut.qr0.qr.b3);
-      $display("c0 = 0x%08x, c1 = 0x%08x", dut.qr0.qr.c0, dut.qr0.qr.c1);
-      $display("d0 = 0x%08x, d1 = 0x%08x", dut.qr0.qr.d0, dut.qr0.qr.d1);
-      $display("d2 = 0x%08x, d3 = 0x%08x", dut.qr0.qr.d2, dut.qr0.qr.d3);
-      $display("");
-      
-      $display("a_prim = 0x%08x, b_prim = 0x%08x", dut.qr0_a_prim, dut.qr0_b_prim);
-      $display("c_prim = 0x%08x, d_prim = 0x%08x", dut.qr0_c_prim, dut.qr0_d_prim);
-      $display("");
-    end
-  endtask // test_quarterround
+//  task test_quarterround(input [31 : 0] a, input [31 : 0] b, 
+//                         input [31 : 0] c, input [31 : 0] d);
+//    begin
+//      $display("Test of quarterround.");
+//      $display("a = 0x%08x, b = 0x%08x", a, b);
+//      $display("c = 0x%08x, d = 0x%08x", c, d);
+//      $display("");
+//      
+//      dut.qr0_a = a;
+//      dut.qr0_b = b;
+//      dut.qr0_c = c;
+//      dut.qr0_d = d;
+//      #(2 * CLK_HALF_PERIOD);
+//      
+//      $display("a0 = 0x%08x, a1 = 0x%08x", dut.qr0.qr.a0, dut.qr0.qr.a1);
+//      $display("b0 = 0x%08x, b1 = 0x%08x", dut.qr0.qr.b0, dut.qr0.qr.b1);
+//      $display("b2 = 0x%08x, b3 = 0x%08x", dut.qr0.qr.b2, dut.qr0.qr.b3);
+//      $display("c0 = 0x%08x, c1 = 0x%08x", dut.qr0.qr.c0, dut.qr0.qr.c1);
+//      $display("d0 = 0x%08x, d1 = 0x%08x", dut.qr0.qr.d0, dut.qr0.qr.d1);
+//      $display("d2 = 0x%08x, d3 = 0x%08x", dut.qr0.qr.d2, dut.qr0.qr.d3);
+//      $display("");
+//      
+//      $display("a_prim = 0x%08x, b_prim = 0x%08x", dut.qr0_a_prim, dut.qr0_b_prim);
+//      $display("c_prim = 0x%08x, d_prim = 0x%08x", dut.qr0_c_prim, dut.qr0_d_prim);
+//      $display("");
+//    end
+//  endtask // test_quarterround
   
 
   //----------------------------------------------------------------
@@ -331,8 +331,8 @@ module tb_salsa20_core();
     begin
       $display("*** Test of Quarterround:");
       $display("");
-      test_quarterround(32'h11223344, 32'h11223344, 32'h11223344, 32'h11223344);
-      test_quarterround(32'h55555555, 32'h55555555, 32'h55555555, 32'h55555555);
+      // test_quarterround(32'h11223344, 32'h11223344, 32'h11223344, 32'h11223344);
+      // test_quarterround(32'h55555555, 32'h55555555, 32'h55555555, 32'h55555555);
     end
   endtask // qr_tests
 
