@@ -7,48 +7,43 @@
 //
 // Copyright (c) 2013, Secworks Sweden AB
 // All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or 
-// without modification, are permitted provided that the following 
-// conditions are met: 
-// 
-// 1. Redistributions of source code must retain the above copyright 
-//    notice, this list of conditions and the following disclaimer. 
-// 
-// 2. Redistributions in binary form must reproduce the above copyright 
-//    notice, this list of conditions and the following disclaimer in 
-//    the documentation and/or other materials provided with the 
-//    distribution. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
-// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
-// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
-// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+//
+// Redistribution and use in source and binary forms, with or
+// without modification, are permitted provided that the following
+// conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in
+//    the documentation and/or other materials provided with the
+//    distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 // BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //======================================================================
 
-//------------------------------------------------------------------
-// Simulator directives.
-//------------------------------------------------------------------
-`timescale 1ns/10ps
-
 module tb_salsa20();
-  
+
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
   parameter DEBUG = 0;
 
   parameter CLK_HALF_PERIOD = 2;
-  
+
   parameter TC1  = 1;
   parameter TC2  = 2;
   parameter TC3  = 3;
@@ -59,7 +54,7 @@ module tb_salsa20();
   parameter TC8  = 8;
   parameter TC9  = 9;
   parameter TC10 = 10;
-  
+
   parameter ONE   = 1;
   parameter TWO   = 2;
   parameter THREE = 3;
@@ -68,14 +63,14 @@ module tb_salsa20();
   parameter SIX   = 6;
   parameter SEVEN = 7;
   parameter EIGHT = 8;
-  
+
   parameter KEY_128_BITS = 0;
   parameter KEY_256_BITS = 1;
 
   parameter EIGHT_ROUNDS  = 8;
   parameter TWELWE_ROUNDS = 12;
   parameter TWENTY_ROUNDS = 20;
-  
+
   parameter DISABLE = 0;
   parameter ENABLE  = 1;
 
@@ -86,13 +81,13 @@ module tb_salsa20();
 
   parameter ADDR_STATUS      = 8'h01;
   parameter STATUS_READY_BIT = 0;
-  
+
   parameter ADDR_KEYLEN      = 8'h08;
   parameter KEYLEN_BIT       = 0;
   parameter ADDR_ROUNDS      = 8'h09;
   parameter ROUNDS_HIGH_BIT  = 4;
   parameter ROUNDS_LOW_BIT   = 0;
-                             
+
   parameter ADDR_KEY0        = 8'h10;
   parameter ADDR_KEY1        = 8'h11;
   parameter ADDR_KEY2        = 8'h12;
@@ -101,10 +96,10 @@ module tb_salsa20();
   parameter ADDR_KEY5        = 8'h15;
   parameter ADDR_KEY6        = 8'h16;
   parameter ADDR_KEY7        = 8'h17;
-                             
+
   parameter ADDR_IV0         = 8'h20;
   parameter ADDR_IV1         = 8'h21;
-                             
+
   parameter ADDR_DATA_IN0    = 8'h40;
   parameter ADDR_DATA_IN1    = 8'h41;
   parameter ADDR_DATA_IN2    = 8'h42;
@@ -121,7 +116,7 @@ module tb_salsa20();
   parameter ADDR_DATA_IN13   = 8'h4d;
   parameter ADDR_DATA_IN14   = 8'h4e;
   parameter ADDR_DATA_IN15   = 8'h4f;
-                             
+
   parameter ADDR_DATA_OUT0   = 8'h80;
   parameter ADDR_DATA_OUT1   = 8'h81;
   parameter ADDR_DATA_OUT2   = 8'h82;
@@ -138,8 +133,8 @@ module tb_salsa20();
   parameter ADDR_DATA_OUT13  = 8'h8d;
   parameter ADDR_DATA_OUT14  = 8'h8e;
   parameter ADDR_DATA_OUT15  = 8'h8f;
-  
-  
+
+
   //----------------------------------------------------------------
   // Register and Wire declarations.
   //----------------------------------------------------------------
@@ -153,20 +148,20 @@ module tb_salsa20();
   reg  [31 : 0] tb_data_in;
   wire [31 : 0] tb_data_out;
   wire          tb_error;
-  
+
   reg [63 : 0] cycle_ctr;
   reg [31 : 0] error_ctr;
   reg [31 : 0] tc_ctr;
-  
+
   reg          error_found;
   reg [31 : 0] read_data;
-  
+
   reg [511 : 0] extracted_data;
-  
+
   reg display_cycle_ctr;
   reg display_read_write;
-  
-  
+
+
   //----------------------------------------------------------------
   // Salsa20 device under test.
   //----------------------------------------------------------------
@@ -174,30 +169,30 @@ module tb_salsa20();
              // Clock and reset.
              .clk(tb_clk),
              .reset_n(tb_reset_n),
-             
+
              // Control.
              .cs(tb_cs),
              .we(tb_write_read),
-             
+
              // Data ports.
              .address(tb_address),
              .write_data(tb_data_in),
              .read_data(tb_data_out),
              .error(tb_error)
             );
-  
+
 
   //----------------------------------------------------------------
   // clk_gen
   //
-  // Clock generator process. 
+  // Clock generator process.
   //----------------------------------------------------------------
-  always 
+  always
     begin : clk_gen
       #CLK_HALF_PERIOD tb_clk = !tb_clk;
     end // clk_gen
 
-  
+
   //--------------------------------------------------------------------
   // dut_monitor
   //
@@ -215,7 +210,7 @@ module tb_salsa20();
 
       if (display_read_write)
         begin
-          
+
           if (dut.cs)
             begin
               if (dut.we)
@@ -228,10 +223,10 @@ module tb_salsa20();
                 end
             end
         end
-      
+
     end // dut_monitor
 
-  
+
   //----------------------------------------------------------------
   // set_display_prefs()
   //
@@ -239,7 +234,7 @@ module tb_salsa20();
   // simulation.
   //----------------------------------------------------------------
   task set_display_prefs(
-                         input cycles, 
+                         input cycles,
                          input read_write);
     begin
       display_cycle_ctr  = cycles;
@@ -247,11 +242,11 @@ module tb_salsa20();
     end
   endtask // set_display_prefs
 
-  
+
   //----------------------------------------------------------------
   // reset_dut
   //----------------------------------------------------------------
-  task reset_dut();
+  task reset_dut;
     begin
       tb_reset_n = 0;
       #(4 * CLK_HALF_PERIOD);
@@ -259,11 +254,11 @@ module tb_salsa20();
     end
   endtask // reset_dut
 
-  
+
   //----------------------------------------------------------------
   // read_reg
   //
-  // Task that reads and display the value of 
+  // Task that reads and display the value of
   // a register in the dut.
   //----------------------------------------------------------------
   task read_reg(input [7 : 0] addr);
@@ -298,14 +293,14 @@ module tb_salsa20();
       tb_data_in    = 32'h00000000;
     end
   endtask // write_reg
-    
-  
+
+
   //----------------------------------------------------------------
   // dump_top_state
   //
   // Dump the internal state of the top to std out.
   //----------------------------------------------------------------
-  task dump_top_state();
+  task dump_top_state;
     begin
       $display("");
       $display("Top internal state");
@@ -345,7 +340,7 @@ module tb_salsa20();
   //
   // Dump the internal state of the core to std out.
   //----------------------------------------------------------------
-  task dump_core_state();
+  task dump_core_state;
     begin
       $display("");
       $display("Core internal state");
@@ -353,7 +348,7 @@ module tb_salsa20();
 //      $display("Internal data state vector:");
 //      $display("0x%064x", dut.core.state_reg);
       $display("");
-      
+
       $display("Round state X:");
       $display("x0_reg  = %08x, x1_reg  = %08x", dut.core.x0_reg, dut.core.x1_reg);
       $display("x2_reg  = %08x, x3_reg  = %08x", dut.core.x2_reg, dut.core.x3_reg);
@@ -364,7 +359,7 @@ module tb_salsa20();
       $display("x12_reg = %08x, x13_reg = %08x", dut.core.x12_reg, dut.core.x13_reg);
       $display("x14_reg = %08x, x15_reg = %08x", dut.core.x14_reg, dut.core.x15_reg);
       $display("");
-      
+
       $display("rounds_reg = %01x", dut.core.rounds_reg);
       $display("qr_ctr_reg = %01x, dr_ctr_reg  = %01x", dut.core.qr_ctr_reg, dut.core.dr_ctr_reg);
       $display("block0_ctr_reg = %08x, block1_ctr_reg = %08x", dut.core.block0_ctr_reg, dut.core.block1_ctr_reg);
@@ -384,13 +379,13 @@ module tb_salsa20();
     end
   endtask // dump_core_state
 
-  
+
   //----------------------------------------------------------------
   // display_test_result()
   //
   // Display the accumulated test results.
   //----------------------------------------------------------------
-  task display_test_result();
+  task display_test_result;
     begin
       if (error_ctr == 0)
         begin
@@ -402,16 +397,16 @@ module tb_salsa20();
         end
     end
   endtask // display_test_result
-  
-    
+
+
   //----------------------------------------------------------------
   // init_dut()
   //
   // Set the input to the DUT to defined values.
   //----------------------------------------------------------------
-  task init_dut();
+  task init_dut;
     begin
-      // Set clock, reset and DUT input signals to 
+      // Set clock, reset and DUT input signals to
       // defined values at simulation start.
       cycle_ctr     = 0;
       error_ctr     = 0;
@@ -425,7 +420,7 @@ module tb_salsa20();
     end
   endtask // init_dut
 
-  
+
   //----------------------------------------------------------------
   // read_write_test()
   //
@@ -434,10 +429,10 @@ module tb_salsa20();
   //
   // Note: Currently not self testing. No expected values.
   //----------------------------------------------------------------
-  task read_write_test();
+  task read_write_test;
     begin
       tc_ctr = tc_ctr + 1;
-      
+
       write_reg(ADDR_KEY0, 32'h55555555);
       read_reg(ADDR_KEY0);
       write_reg(ADDR_KEY1, 32'haaaaaaaa);
@@ -464,8 +459,8 @@ module tb_salsa20();
   //
   // Write key, iv and other parameters to the dut.
   //----------------------------------------------------------------
-  task write_parameters(input [256 : 0] key, 
-                            input           key_length, 
+  task write_parameters(input [256 : 0] key,
+                            input           key_length,
                             input [64 : 0]  iv,
                             input [4 : 0]   rounds);
     begin
@@ -484,7 +479,7 @@ module tb_salsa20();
     end
   endtask // write_parameters
 
-    
+
   //----------------------------------------------------------------
   // start_init_block()
   //
@@ -494,15 +489,15 @@ module tb_salsa20();
   // Note: It is the callers responsibility to call the function
   // when the dut is ready to react on the init signal.
   //----------------------------------------------------------------
-  task start_init_block();
+  task start_init_block;
     begin
       write_reg(ADDR_CTRL, 32'h00000001);
       #(4 * CLK_HALF_PERIOD);
       write_reg(ADDR_CTRL, 32'h00000000);
     end
   endtask // start_init_block
-  
-    
+
+
   //----------------------------------------------------------------
   // start_next_block()
   //
@@ -512,7 +507,7 @@ module tb_salsa20();
   // Note: It is the callers responsibility to call the function
   // when the dut is ready to react on the next signal.
   //----------------------------------------------------------------
-  task start_next_block();
+  task start_next_block;
     begin
       write_reg(ADDR_CTRL, 32'h00000002);
       #(4 * CLK_HALF_PERIOD);
@@ -527,7 +522,7 @@ module tb_salsa20();
         end
     end
   endtask // start_next_block
-  
+
 
   //----------------------------------------------------------------
   // wait_ready()
@@ -538,7 +533,7 @@ module tb_salsa20();
   // when the dut is actively processing and will in fact at some
   // point set the flag.
   //----------------------------------------------------------------
-  task wait_ready();
+  task wait_ready;
     begin
       while (!tb_data_out[STATUS_READY_BIT])
         begin
@@ -554,7 +549,7 @@ module tb_salsa20();
   // Extracts all 16 data out words and combine them into the
   // global extracted_data.
   //----------------------------------------------------------------
-  task extract_data();
+  task extract_data;
     begin
       read_reg(ADDR_DATA_OUT0);
       extracted_data[511 : 480] = tb_data_out;
@@ -590,24 +585,24 @@ module tb_salsa20();
       extracted_data[31  :   0] = tb_data_out;
     end
   endtask // extract_data
-  
-    
+
+
   //----------------------------------------------------------------
   // run_two_blocks_test_vector()
   //
-  // Runs a test case with two blocks based on the given 
+  // Runs a test case with two blocks based on the given
   // test vector. Only the final block is compared.
   //----------------------------------------------------------------
-  task run_two_blocks_test_vector(input [7 : 0]   major, 
-                                  input [7 : 0]   minor, 
-                                  input [256 : 0] key, 
-                                  input           key_length, 
+  task run_two_blocks_test_vector(input [7 : 0]   major,
+                                  input [7 : 0]   minor,
+                                  input [256 : 0] key,
+                                  input           key_length,
                                   input [64 : 0]  iv,
                                   input [4 : 0]   rounds,
                                   input [511 : 0] expected);
     begin
       tc_ctr = tc_ctr + 1;
-      
+
       $display("***TC%2d-%2d started", major, minor);
       $display("***-----------------");
       write_parameters(key, key_length, iv, rounds);
@@ -620,11 +615,11 @@ module tb_salsa20();
         begin
           $display("State after first block:");
           dump_core_state();
-          
+
           $display("First block:");
           $display("0x%064x", extracted_data);
         end
-      
+
       start_next_block();
 
       if (DEBUG)
@@ -640,11 +635,11 @@ module tb_salsa20();
         begin
           $display("State after init of second block:");
           dump_core_state();
-          
+
           $display("Second block:");
           $display("0x%064x", extracted_data);
         end
-      
+
       if (extracted_data != expected)
         begin
           error_ctr = error_ctr + 1;
@@ -663,23 +658,23 @@ module tb_salsa20();
       $display("");
     end
   endtask // run_two_blocks_test_vector
-  
-    
+
+
   //----------------------------------------------------------------
   // run_test_vector()
   //
   // Runs a test case based on the given test vector.
   //----------------------------------------------------------------
-  task run_test_vector(input [7 : 0]   major, 
-                       input [7 : 0]   minor, 
-                       input [256 : 0] key, 
-                       input           key_length, 
+  task run_test_vector(input [7 : 0]   major,
+                       input [7 : 0]   minor,
+                       input [256 : 0] key,
+                       input           key_length,
                        input [64 : 0]  iv,
                        input [4 : 0]   rounds,
                        input [511 : 0] expected);
     begin
       tc_ctr = tc_ctr + 1;
-      
+
       $display("***TC%2d-%2d started", major, minor);
       $display("***-----------------");
       write_parameters(key, key_length, iv, rounds);
@@ -687,7 +682,7 @@ module tb_salsa20();
       start_init_block();
       wait_ready();
       extract_data();
-      
+
       if (extracted_data != expected)
         begin
           error_ctr = error_ctr + 1;
@@ -706,11 +701,11 @@ module tb_salsa20();
       $display("");
     end
   endtask // run_test_vector
-    
-    
+
+
   //----------------------------------------------------------------
   // salsa20_test
-  // The main test functionality. 
+  // The main test functionality.
   //----------------------------------------------------------------
   initial
     begin : salsa20_test
@@ -723,7 +718,7 @@ module tb_salsa20();
       dump_top_state();
 
       $display("TC1-1: All zero inputs. 128 bit key, 8 rounds.");
-      run_test_vector(TC1, ONE, 
+      run_test_vector(TC1, ONE,
                     256'h0000000000000000000000000000000000000000000000000000000000000000,
                     KEY_128_BITS,
                     64'h0000000000000000,
@@ -732,7 +727,7 @@ module tb_salsa20();
 
       $display("TC7-2: Increasing, decreasing sequences in key and IV. 256 bit key, 8 rounds.");
       run_test_vector(TC7, TWO,
-                    256'h00112233445566778899aabbccddeeffffeeddccbbaa99887766554433221100,                    
+                    256'h00112233445566778899aabbccddeeffffeeddccbbaa99887766554433221100,
                     KEY_256_BITS,
                     64'h0f1e2d3c4b596877,
                     EIGHT_ROUNDS,
@@ -742,13 +737,13 @@ module tb_salsa20();
       $display("TC7-3: Increasing, decreasing sequences in key and IV. 256 bit key, 8 rounds.");
       $display("TC7-3: Testing correct second block.");
       run_two_blocks_test_vector(TC7, THREE,
-                                 256'h00112233445566778899aabbccddeeffffeeddccbbaa99887766554433221100,                    
+                                 256'h00112233445566778899aabbccddeeffffeeddccbbaa99887766554433221100,
                                  KEY_256_BITS,
                                  64'h0f1e2d3c4b596877,
                                  EIGHT_ROUNDS,
                                  512'hfe882395601ce8aded444867fe62ed8741420002e5d28bb573113a418c1f4008e954c188f38ec4f26bb8555e2b7c92bf4380e2ea9e553187fdd42821794416de);
-      
-      
+
+
       display_test_result();
       $display("*** salsa20 simulation done.");
       $finish;

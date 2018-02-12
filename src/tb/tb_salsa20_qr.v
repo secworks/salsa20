@@ -8,45 +8,40 @@
 // Author: Joachim Strombergson
 // Copyright (c) 2014, Secworks Sweden AB
 // All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or 
-// without modification, are permitted provided that the following 
-// conditions are met: 
-// 
-// 1. Redistributions of source code must retain the above copyright 
-//    notice, this list of conditions and the following disclaimer. 
-// 
-// 2. Redistributions in binary form must reproduce the above copyright 
-//    notice, this list of conditions and the following disclaimer in 
-//    the documentation and/or other materials provided with the 
-//    distribution. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
-// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
-// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
-// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+//
+// Redistribution and use in source and binary forms, with or
+// without modification, are permitted provided that the following
+// conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in
+//    the documentation and/or other materials provided with the
+//    distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 // BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //======================================================================
-
-//------------------------------------------------------------------
-// Simulator directives.
-//------------------------------------------------------------------
-`timescale 10ns/1ns
 
 
 //------------------------------------------------------------------
 // Test module.
 //------------------------------------------------------------------
 module tb_salsa20_qr();
-  
+
   //----------------------------------------------------------------
   // Internal constant and parameter definitions.
   //----------------------------------------------------------------
@@ -55,7 +50,7 @@ module tb_salsa20_qr();
   parameter CLK_HALF_PERIOD = 1;
   parameter CLK_PERIOD = 2 * CLK_HALF_PERIOD;
 
-  
+
   //----------------------------------------------------------------
   // Register and Wire declarations.
   //----------------------------------------------------------------
@@ -75,8 +70,8 @@ module tb_salsa20_qr();
   wire [31 : 0] tb_z1;
   wire [31 : 0] tb_z2;
   wire [31 : 0] tb_z3;
-  
-  
+
+
   //----------------------------------------------------------------
   // Device Under Test.
   //----------------------------------------------------------------
@@ -85,25 +80,25 @@ module tb_salsa20_qr();
                  .y1(tb_y1),
                  .y2(tb_y2),
                  .y3(tb_y3),
-                 
+
                  .z0(tb_z0),
                  .z1(tb_z1),
                  .z2(tb_z2),
                  .z3(tb_z3)
                 );
-  
+
 
   //----------------------------------------------------------------
   // clk_gen
   //
   // Always running clock generator process.
   //----------------------------------------------------------------
-  always 
+  always
     begin : clk_gen
       #CLK_HALF_PERIOD;
       tb_clk = !tb_clk;
     end // clk_gen
-    
+
 
   //----------------------------------------------------------------
   // sys_monitor()
@@ -121,13 +116,13 @@ module tb_salsa20_qr();
         end
     end
 
-  
+
   //----------------------------------------------------------------
   // dump_dut_state()
   //
   // Dump the state of the dump when needed.
   //----------------------------------------------------------------
-  task dump_dut_state();
+  task dump_dut_state;
     begin
       $display("State of DUT");
       $display("------------");
@@ -140,19 +135,19 @@ module tb_salsa20_qr();
     end
   endtask // dump_dut_state
 
-  
+
   //----------------------------------------------------------------
   // init_sim()
   //
   // Initialize all counters and testbed functionality as well
   // as setting the DUT inputs to defined values.
   //----------------------------------------------------------------
-  task init_sim();
+  task init_sim;
     begin
       cycle_ctr = 0;
       error_ctr = 0;
       tc_ctr    = 0;
-      
+
       tb_y0     = 0;
       tb_y1     = 0;
       tb_y2     = 0;
@@ -160,13 +155,13 @@ module tb_salsa20_qr();
     end
   endtask // init_sim
 
-  
+
   //----------------------------------------------------------------
   // display_test_result()
   //
   // Display the accumulated test results.
   //----------------------------------------------------------------
-  task display_test_result();
+  task display_test_result;
     begin
       if (error_ctr == 0)
         begin
@@ -174,7 +169,7 @@ module tb_salsa20_qr();
         end
       else
         begin
-          $display("*** %02d tests completed - %02d test cases did not complete successfully.", 
+          $display("*** %02d tests completed - %02d test cases did not complete successfully.",
                    tc_ctr, error_ctr);
         end
     end
@@ -186,8 +181,8 @@ module tb_salsa20_qr();
   //
   // Test case runner task.
   //----------------------------------------------------------------
-  task test_qr(input [31 : 0] y0, 
-               input [31 : 0] y1, 
+  task test_qr(input [31 : 0] y0,
+               input [31 : 0] y1,
                input [31 : 0] y2,
                input [31 : 0] y3,
                input [31 : 0] ez0,
@@ -217,12 +212,12 @@ module tb_salsa20_qr();
       tc_ctr = tc_ctr + 1;
     end
   endtask // test_qr
-  
+
 
   //----------------------------------------------------------------
   // salsa20_qr_test
   //
-  // The main test functionality. 
+  // The main test functionality.
   //----------------------------------------------------------------
   initial
     begin : salsa20_qr_test
@@ -239,7 +234,7 @@ module tb_salsa20_qr();
       $display("   -= Testbench for Salsa20 qr started =-");
       $display("    =====================================");
       $display("");
-      
+
       init_sim();
       dump_dut_state();
 
@@ -270,7 +265,7 @@ module tb_salsa20_qr();
       ez0 = 32'h88000100;
       ez1 = 32'h00000001;
       ez2 = 32'h00000200;
-      ez3 = 32'h00402000;      
+      ez3 = 32'h00402000;
       test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
 
       ty0 = 32'h00000000;
@@ -312,7 +307,7 @@ module tb_salsa20_qr();
       ez2 = 32'h6ab2a923;
       ez3 = 32'h2883524c;
       test_qr(ty0, ty1, ty2, ty3, ez0, ez1, ez2, ez3);
-      
+
       display_test_result();
       $display("");
       $display("*** Salsa20 qr simulation done. ***");
