@@ -3,6 +3,9 @@
 // tb_salsa20_qr.v
 // ---------------
 // Testbench for the Salsa20 quarterround logic module.
+// The example values are taken from the Salsa20 specification:
+// https://cr.yp.to/snuffle/spec.pdf
+// See chapter 3.
 //
 //
 // Author: Joachim Strombergson
