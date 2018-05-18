@@ -52,7 +52,7 @@ LINT = verilator
 LINT_FLAGS = +1364-2001ext+ --lint-only -Wall -Wno-fatal -Wno-DECLFILENAME
 
 
-all: top core
+all: top core qr
 
 
 top: $(TOP_TB_SRC) $(TOP_SRC)
@@ -70,7 +70,6 @@ sim-qr: qr.sim
 
 sim-core: core.sim
 	./core.sim
-
 
 sim-top: top.sim
 	./top.sim
