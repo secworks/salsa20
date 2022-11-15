@@ -1,0 +1,30 @@
+CAPI=2:
+
+name : secworks:crypto:salsa20
+
+filesets:
+  rtl:
+    files:
+      - src/rtl/salsa20_qr.v
+      - src/rtl/salsa20_core.v
+      - src/rtl/salsa20.v
+    file_type : verilogSource
+
+  sky130:
+    files: [data/sky130.tcl : {file_type : tclSource}]
+
+targets:
+  default:
+    filesets: [rtl]
+
+  lint:
+    default_tool : verilator
+    filesets : [rtl]
+    tools:
+      verilator: {mode: lint-only}
+    toplevel: salsa20
+
+  sky130:
+    default_tool : openlane
+    filesets: [rtl, sky130]
+    toplevel : salsa20
